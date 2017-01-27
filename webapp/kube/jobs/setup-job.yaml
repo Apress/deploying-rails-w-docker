@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: setup
+spec:
+  template:
+    metadata:
+      name: setup
+    spec:
+      containers:
+      - name: setup
+        image: pacuna/webapp:LAST_COMMIT
+        command: ["/bin/bash", "./setup.production.sh"]
+        env:
+        - name: PASSENGER_APP_ENV
+          value: production
+      restartPolicy: Never

@@ -1,0 +1,34 @@
+version: '2'
+services:
+  webapp_setup:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      - PASSENGER_APP_ENV=development
+    entrypoint: ./setup.sh
+  webapp:
+    container_name: webapp
+    build: .
+    depends_on:
+      - postgres
+      - webapp_setup
+    environment:
+      - PASSENGER_APP_ENV=development
+    ports:
+      - "80:80"
+    volumes:
+      - .:/home/app/webapp
+  postgres:
+    image: postgres:9.5.3
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=webapp
+      - POSTGRES_DB=webapp_development
+    volumes_from:
+      - postgres_data
+  postgres_data:
+      image: postgres:9.5.3
+      volumes:
+        - /var/lib/postgresql/data
+      command: /bin/true

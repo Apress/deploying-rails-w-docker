@@ -1,0 +1,16 @@
+version: '2'
+services:
+  webapp_test:
+    container_name: webapp_test
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      - PASSENGER_APP_ENV=development
+    entrypoint: ./setup.test.sh
+  postgres:
+    image: postgres:9.5.3
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=webapp
+      - POSTGRES_DB=webapp_test

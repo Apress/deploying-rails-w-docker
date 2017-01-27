@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: webapp
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: webapp
+    tier: postgres
+  clusterIP: None
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: webapp
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: webapp
+        tier: postgres
+    spec:
+      containers:
+      - image: postgres:9.5.3
+        name: postgres
+        env:
+        - name: POSTGRES_PASSWORD
+          value: mysecretpassword
+        - name: POSTGRES_USER
+          value: webapp
+        - name: POSTGRES_DB
+          value: webapp_production
+        ports:
+        - containerPort: 5432
+          name: postgres

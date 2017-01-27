@@ -1,0 +1,14 @@
+{
+  "containerOverrides": [
+    {
+      "name": "webapp",
+      "command": ["bin/rails", "db:migrate", "RAILS_ENV=production"],
+      "environment": [
+        {
+          "name": "PASSENGER_APP_ENV",
+          "value": "production"
+        }
+      ]
+    }
+  ]
+}
